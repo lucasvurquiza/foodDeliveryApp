@@ -1,4 +1,4 @@
-import {MainLayout} from './MainLayout';
+import MainLayout from './MainLayout';
 
 // Home
 import {Home} from './Home';

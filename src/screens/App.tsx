@@ -7,6 +7,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import rootReducer from '../stores/rootReducer';
+import {StatusBar} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -14,17 +15,20 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName={'Home'}>
-          <Stack.Screen name="Home" component={CustomDrawer} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <>
+      <StatusBar translucent backgroundColor="transparent" />
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            initialRouteName={'Home'}>
+            <Stack.Screen name="Home" component={CustomDrawer} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    </>
   );
 };
 
