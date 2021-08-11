@@ -5,9 +5,16 @@ import {COLORS, FONTS, SIZES} from '../../constants';
 type CustomDrawerItemProps = {
   label: string;
   icon: ImageSourcePropType;
+  isFocused: boolean;
+  onPress: () => void;
 };
 
-export const CustomDrawerItem = ({label, icon}: CustomDrawerItemProps) => {
+export const CustomDrawerItem = ({
+  label,
+  icon,
+  isFocused,
+  onPress,
+}: CustomDrawerItemProps) => {
   return (
     <TouchableOpacity
       style={{
@@ -17,7 +24,9 @@ export const CustomDrawerItem = ({label, icon}: CustomDrawerItemProps) => {
         alignItems: 'center',
         paddingLeft: SIZES.radius,
         borderRadius: SIZES.base,
-      }}>
+        backgroundColor: isFocused ? COLORS.transparentBlack1 : null,
+      }}
+      onPress={onPress}>
       <Image
         source={icon}
         style={{

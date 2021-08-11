@@ -11,7 +11,11 @@ import {
 } from '../../constants';
 import {CustomDrawerItem} from '../../components/CustomDrawerItem';
 
-export const CustomDrawerContent = ({navigation}) => {
+export const CustomDrawerContent = ({
+  navigation,
+  selectedTab,
+  setSelectedTab,
+}) => {
   return (
     <DrawerContentScrollView
       scrollEnabled={true}
@@ -87,18 +91,41 @@ export const CustomDrawerContent = ({navigation}) => {
             flex: 1,
             marginTop: SIZES.padding,
           }}>
-          <CustomDrawerItem label={constants.screens.home} icon={icons.home} />
+          <CustomDrawerItem
+            label={constants.screens.home}
+            icon={icons.home}
+            isFocused={selectedTab === constants.screens.home}
+            onPress={() => {
+              setSelectedTab(constants.screens.home);
+              navigation.navigate('MainLayout');
+            }}
+          />
           <CustomDrawerItem
             label={constants.screens.my_wallet}
             icon={icons.wallet}
+            isFocused={selectedTab === constants.screens.my_wallet}
+            onPress={() => {
+              setSelectedTab(constants.screens.my_wallet);
+              navigation.navigate('MainLayout');
+            }}
           />
           <CustomDrawerItem
             label={constants.screens.notification}
             icon={icons.notification}
+            isFocused={selectedTab === constants.screens.notification}
+            onPress={() => {
+              setSelectedTab(constants.screens.notification);
+              navigation.navigate('MainLayout');
+            }}
           />
           <CustomDrawerItem
             label={constants.screens.favourite}
             icon={icons.favourite}
+            isFocused={selectedTab === constants.screens.favourite}
+            onPress={() => {
+              setSelectedTab(constants.screens.favourite);
+              navigation.navigate('MainLayout');
+            }}
           />
 
           {/* Line Divider */}

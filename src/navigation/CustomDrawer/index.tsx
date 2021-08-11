@@ -6,10 +6,12 @@ import {COLORS} from '../../constants';
 import {useState} from 'react';
 import Animated from 'react-native-reanimated';
 import {CustomDrawerContent} from '../../components/CustomDrawerContent';
+import {connect} from 'react-redux';
+import {setSelectedTab} from '../../stores/tab/tabActions';
 
 const Drawer = createDrawerNavigator();
 
-export const CustomDrawer = () => {
+const CustomDrawer = ({selectedTab, setSelectedTab}) => {
   const [progress, setProgress] = useState(new Animated.Value(0));
 
   const scale = Animated.interpolateNode(progress, {
@@ -43,7 +45,13 @@ export const CustomDrawer = () => {
           setTimeout(() => {
             setProgress(props.progress);
           }, 0);
-          return <CustomDrawerContent navigation={props.navigation} />;
+          return (
+            <CustomDrawerContent
+              navigation={props.navigation}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+            />
+          );
         }}>
         <Drawer.Screen name="MainLayout">
           {props => (
@@ -54,3 +62,19 @@ export const CustomDrawer = () => {
     </View>
   );
 };
+
+function mapStateToProps(state) {
+  return {
+    selectedTab: state.tabReducer.selectedTab,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setSelectedTab: selectedTab => {
+      return dispatch(setSelectedTab(selectedTab));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer);
