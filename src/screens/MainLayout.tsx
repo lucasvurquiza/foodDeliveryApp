@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -18,58 +18,7 @@ import {setSelectedTab} from '../stores/tab/tabActions';
 import {Home, Search, Cart, Favourite, Notification} from '../screens';
 import {COLORS, FONTS, SIZES, icons, constants, dummyData} from '../constants';
 import {Header} from '../components/Header';
-
-const TabButton = ({
-  label,
-  icon,
-  isFocused,
-  outerContainerStyle,
-  innerContainerStyle,
-  onPress,
-}) => {
-  return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <Animated.View
-        style={[
-          {flex: 1, alignItems: 'center', justifyContent: 'center'},
-          outerContainerStyle,
-        ]}>
-        <Animated.View
-          style={[
-            {
-              flexDirection: 'row',
-              width: '80%',
-              height: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 25,
-            },
-            innerContainerStyle,
-          ]}>
-          <Image
-            source={icon}
-            style={{
-              width: 20,
-              height: 20,
-              tintColor: COLORS.gray,
-            }}
-          />
-          {isFocused && (
-            <Text
-              numberOfLines={1}
-              style={{
-                marginLeft: SIZES.base,
-                color: COLORS.gray,
-                ...FONTS.h3,
-              }}>
-              {label}
-            </Text>
-          )}
-        </Animated.View>
-      </Animated.View>
-    </TouchableWithoutFeedback>
-  );
-};
+import {TabButton} from '../components/TabButton';
 
 const MainLayout = ({
   drawerAnimationStyle,
@@ -77,6 +26,8 @@ const MainLayout = ({
   selectedTab,
   setSelectedTab,
 }) => {
+  const flatListRef = useRef();
+
   const homeTabFlex = useSharedValue(1);
   const homeTabColor = useSharedValue(COLORS.white);
   const searchTabFlex = useSharedValue(1);
@@ -149,6 +100,10 @@ const MainLayout = ({
 
   useEffect(() => {
     if (selectedTab === constants.screens.home) {
+      flatListRef?.current?.scrollToIndex({
+        index: 0,
+        animated: false,
+      });
       homeTabFlex.value = withTiming(4, {duration: 500});
       homeTabColor.value = withTiming(COLORS.primary, {duration: 500});
     } else {
@@ -157,6 +112,10 @@ const MainLayout = ({
     }
 
     if (selectedTab === constants.screens.search) {
+      flatListRef?.current?.scrollToIndex({
+        index: 1,
+        animated: false,
+      });
       searchTabFlex.value = withTiming(4, {duration: 500});
       searchTabColor.value = withTiming(COLORS.primary, {duration: 500});
     } else {
@@ -165,6 +124,10 @@ const MainLayout = ({
     }
 
     if (selectedTab === constants.screens.cart) {
+      flatListRef?.current?.scrollToIndex({
+        index: 2,
+        animated: false,
+      });
       cartTabFlex.value = withTiming(4, {duration: 500});
       cartTabColor.value = withTiming(COLORS.primary, {duration: 500});
     } else {
@@ -173,6 +136,10 @@ const MainLayout = ({
     }
 
     if (selectedTab === constants.screens.favourite) {
+      flatListRef?.current?.scrollToIndex({
+        index: 3,
+        animated: false,
+      });
       favouriteTabFlex.value = withTiming(4, {duration: 500});
       favouriteTabColor.value = withTiming(COLORS.primary, {duration: 500});
     } else {
@@ -181,6 +148,10 @@ const MainLayout = ({
     }
 
     if (selectedTab === constants.screens.notification) {
+      flatListRef?.current?.scrollToIndex({
+        index: 4,
+        animated: false,
+      });
       notificationTabFlex.value = withTiming(4, {duration: 500});
       notificationTabColor.value = withTiming(COLORS.primary, {duration: 500});
     } else {
@@ -241,7 +212,33 @@ const MainLayout = ({
         style={{
           flex: 1,
         }}>
-        <Text>MainLayout</Text>
+        <FlatList
+          ref={flatListRef}
+          scrollEnabled={false}
+          pagingEnabled
+          snapToAlignment="center"
+          snapToInterval={SIZES.width}
+          showsHorizontalScrollIndicator={false}
+          data={constants.bottom_tabs}
+          keyExtractor={item => `${item.id}`}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                style={{
+                  height: SIZES.height,
+                  width: SIZES.width,
+                }}>
+                {item.label === constants.screens.home && <Home />}
+                {item.label === constants.screens.search && <Search />}
+                {item.label === constants.screens.cart && <Cart />}
+                {item.label === constants.screens.favourite && <Favourite />}
+                {item.label === constants.screens.notification && (
+                  <Notification />
+                )}
+              </View>
+            );
+          }}
+        />
       </View>
 
       <View
